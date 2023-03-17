@@ -5,7 +5,6 @@ public class SLAE_GAUSS {
     private int num; // Количество уравнений в системе
     private double[] ans; // Массив решений системы, если система не была решена, содержит null
 
-
     // Конструктор по умолчанию, инициализация переменных класса нулями
     public SLAE_GAUSS(){
         num = 0;
@@ -17,7 +16,7 @@ public class SLAE_GAUSS {
     private void create(int num){
         // Выделение памяти для массива num указателей
         // Для каждого из num массивов выделение памяти под num+1 элементов
-        // Инициализация массива решений
+        // Инициализация массива решений // TODO (не надо т.к. пока не знаем есть ли решения)
     }
 
     // Инициализация системы чтением из файла, на вход имя файла выбрасывает исключение если такой файл не найден
@@ -46,7 +45,7 @@ public class SLAE_GAUSS {
     // Метод проверяет является первый аргумент по модулю больше второго и выводит true или false
     private static boolean absMore(double a, double b){
         return false;
-    }
+    } // TODO  УБРАТЬ
 
     // Метод ищент наибольшее по модулю ненулевое число в конкретним столбще ниже конкретного элемента, включая его
     private int findMaxNotZero(int start, int col){
@@ -60,7 +59,7 @@ public class SLAE_GAUSS {
     }
 
     // Метод преобразует матрицу к треугольному виду, если система вырожденная выбрасывает исключение
-    public void makeTriangle() throws SLAEException{
+    public void makeTriangle() throws SLAEException{ // TODO СДЕЛАТЬ ОТДЕЛЬНЫЙ МЕТОД (МНОГО ЦИКЛОВ)
         /*
         Для всех строк от 1 до num-1:
             k=0
@@ -76,7 +75,7 @@ public class SLAE_GAUSS {
         */
     }
     // Метод вычисляет решение системы, если она до этого была приведена к треугольному виду    (НАДО ЛИ ПРОВЕРЯТЬ)
-    public void computeAnss() throws SLAEException{
+    public void computeAnss() throws SLAEException{ // TODO вывод ссылку на решения, в аргументы давать вывод triangle
         /*
         Проверить я
         Для последней строки
@@ -93,7 +92,7 @@ public class SLAE_GAUSS {
             ans[j] = a[j][num+1]
             для i от num до j
                 ans[j] -= a[j][i]*ans[i]
-            ans/=a[j][j]
+            ans /= a[j][j]
 
          */
 
@@ -116,4 +115,7 @@ public class SLAE_GAUSS {
     public double[] getAns() {
         return ans;
     }
+
+
+    // TODO метод вывода решений
 }
