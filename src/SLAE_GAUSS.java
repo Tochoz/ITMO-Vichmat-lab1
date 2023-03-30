@@ -1,4 +1,7 @@
 import java.io.FileNotFoundException;
+import java.io.File;
+import java.util.Scanner;
+import java.util.regex.*;
 
 public class SLAE_GAUSS {
     private double[][] a; // Двумерный массив коэффициентов и
@@ -14,9 +17,10 @@ public class SLAE_GAUSS {
 
     // Метод выделяющий память под заданное количество строк
     private void create(int num){
+        this.num = num;
+        a = new double[num][num + 1];
         // Выделение памяти для массива num указателей
         // Для каждого из num массивов выделение памяти под num+1 элементов
-        // Инициализация массива решений // TODO (не надо т.к. пока не знаем есть ли решения)
     }
 
     // Инициализация системы чтением из файла, на вход имя файла выбрасывает исключение если такой файл не найден
@@ -31,6 +35,21 @@ public class SLAE_GAUSS {
         3. Построчное сканирование n строк с n+1 числами и запись в a[][]
         4. Закрытие сканера
         */
+        File file = new File(s);
+        Scanner scan = new Scanner(file);
+        Pattern pat = Pattern.compile("[\\s\\t]+");
+        String str = scan.nextLine();
+        String [] sn = pat.split(str.trim());
+        num = Integer.parseInt(sn[0]);
+        create(num);
+        int i, j;
+        for (i=0; i<num; i++){
+            str = scan.nextLine();
+            sn = pat.split(str.trim());
+            for (j=0; j<num+1; j++)
+                a[i][j] = Double.parseDouble(sn[j]);
+        }
+        scan.close();
     }
 
     // Метод меняет две указанные строки в матрице местами
@@ -40,12 +59,11 @@ public class SLAE_GAUSS {
         Замена i ссылка на j ссылку
         Запись в j ссылку ссылки из временной переменной
          */
+        double [] temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
     }
 
-    // Метод проверяет является первый аргумент по модулю больше второго и выводит true или false
-    private static boolean absMore(double a, double b){
-        return false;
-    } // TODO  УБРАТЬ
 
     // Метод ищент наибольшее по модулю ненулевое число в конкретним столбще ниже конкретного элемента, включая его
     private int findMaxNotZero(int start, int col){
@@ -56,6 +74,10 @@ public class SLAE_GAUSS {
         вывод max
          */
         return 0;
+    }
+
+    private void calcStr(int i){
+
     }
 
     // Метод преобразует матрицу к треугольному виду, если система вырожденная выбрасывает исключение
