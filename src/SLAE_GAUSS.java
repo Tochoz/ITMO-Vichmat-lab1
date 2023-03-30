@@ -46,7 +46,7 @@ public class SLAE_GAUSS {
         for (i=0; i<num; i++){
             str = scan.nextLine();
             sn = pat.split(str.trim());
-            for (j=0; j<num+1; j++)
+            for (j=0; j <= num; j++)
                 a[i][j] = Double.parseDouble(sn[j]);
         }
         scan.close();
@@ -64,8 +64,12 @@ public class SLAE_GAUSS {
         a[j] = temp;
     }
 
+    private static boolean isZero(double a){
+        return Math.abs(a) < 0.0001;
+    }
 
-    // Метод ищент наибольшее по модулю ненулевое число в конкретним столбще ниже конкретного элемента, включая его
+
+    // Метод ищент наибольшее по модулю ненулевое число в конкретним столбще ниже конкретного элемента
     private int findMaxNotZero(int start, int col){
         /*
         запись в переменную max a[start][col]
@@ -73,15 +77,20 @@ public class SLAE_GAUSS {
             если мах по модулю меньше a[i][col], замена его на новый
         вывод max
          */
+        for (int i=start+1; i< num; i++)
+            if (!isZero(a[i][col]))
+                return i;
         return 0;
     }
 
-    private void calcStr(int i){
-
+    private void calcStr(int i, int j, double m_i){
+        for (int col = i; col <= num; col++)
+            a[j][col] -= m_i*a[i][col];
     }
 
     // Метод преобразует матрицу к треугольному виду, если система вырожденная выбрасывает исключение
-    public void makeTriangle() throws SLAEException{ // TODO СДЕЛАТЬ ОТДЕЛЬНЫЙ МЕТОД (МНОГО ЦИКЛОВ)
+    // Если просто вырождена 0, имеет ни одного 1, имеет беконечно 2, если всё ок то 3
+    public int makeTriangle() { // TODO СДЕЛАТЬ ОТДЕЛЬНЫЙ МЕТОД (МНОГО ЦИКЛОВ)
         /*
         Для всех строк от 1 до num-1:
             k=0
@@ -94,30 +103,71 @@ public class SLAE_GAUSS {
                 вычитаем из данной строки строку k умноженную на m_i
             k++
 
-        */
-    }
-    // Метод вычисляет решение системы, если она до этого была приведена к треугольному виду    (НАДО ЛИ ПРОВЕРЯТЬ)
-    public void computeAnss() throws SLAEException{ // TODO вывод ссылку на решения, в аргументы давать вывод triangle
-        /*
-        Проверить я
         Для последней строки
         если a[num][num] = 0:
             если a[num][num+1] = 0:
                 выбросить исключение с сообщением "Бесконечно много решений"
             иначе:
                 выбросить исключение с сообщением "Решений нет"
+        */
+        int k=0, sec;
+        double m_i;
+        for (int i=0; i<num; i++){
+            if (isZero(a[i][i])) {
+                sec = findMaxNotZero(i, i); // Переменная хранящая номер новой строки с которой поменять
+                if (sec != 0)
+                    swapRows(i, sec);
+                else
+                    return 0;
+            }
+            for (int j=i+1; j<num; j++){
+                m_i = a[j][i]/a[i][i];
+                calcStr(i, j, m_i);
+            }
+            k++;
+        }
+        if (isZero(a[num-1][num])){
+            if (isZero(a[num-1][num]))
+                return 2;
+            return 1;
+        }
+        return 3;
+    }
+    // Метод вычисляет решение системы, если она до этого была приведена к треугольному виду    (НАДО ЛИ ПРОВЕРЯТЬ)
+    public double[] computeAnss(int input){ // TODO вывод ссылку на решения, в аргументы давать вывод triangle
+        switch (input){
+            case 0:
+                System.out.println("Система вырожденная");
+                return null;
+            case 1:
+                System.out.println("Система не имеет решений");
+                return null;
+            case 2:
+                System.out.println("Система имеет бесконечно много решений");
+                return null;
+        }
+        /*
+
 
         записать ans[num] как a[num][num+1]/a[num][num]
 
         Вычислить решения дя всех неизвестных с конца
-        для j от num-1 до 0
-            ans[j] = a[j][num+1]
-            для i от num до j
-                ans[j] -= a[j][i]*ans[i]
-            ans /= a[j][j]
+        для i от num-1 до 0
+            ans[i] = a[i][num+1]
+            для j от num до i
+                ans[i] -= a[i][j]*ans[j]
+            ans /= a[i][i]
 
          */
-
+        ans = new double[num];
+        ans[num-1] = a[num-1][num]/a[num-1][num-1];
+        for (int i=num-2; i >= 0; i--){
+            ans[i] = a[i][num];
+            for (int j=num-1; j>i; j--)
+                ans[i] -= a[i][j]*ans[j];
+            ans[i] /= a[i][i];
+        }
+        return ans;
     }
 
     // Метод вывода двумерного массива коэффициентов системы в экспонениальном виде
@@ -146,4 +196,9 @@ public class SLAE_GAUSS {
 
 
     // TODO метод вывода решений
+    public void printAns(){
+        for (int i=0; i<num; i++)
+            System.out.printf("%15.6E",ans[i]);
+        System.out.println();
+    }
 }
