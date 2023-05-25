@@ -89,7 +89,7 @@ public class SLAE_GAUSS {
         a[j][i] = 0;
         for (int col = i+1; col <= num; col++) {
             a[j][col] -= m_i * a[i][col];
-            
+
             if (isZero(a[j][col]))
                 a[j][col] = 0;
         }
@@ -129,9 +129,7 @@ public class SLAE_GAUSS {
             for (int j=i+1; j<num; j++)
                 calcStr(i, j);
         }
-
-        // Проверить вырожденная ли система
-        if (isZero(a[num-1][num])){
+        if (isZero(a[num-1][num-1])){
             if (isZero(a[num-1][num]))
                 return 2;
             return 1;
@@ -157,7 +155,7 @@ public class SLAE_GAUSS {
 
         записать ans[num] как a[num][num+1]/a[num][num]
 
-        Вычислить решения для всех неизвестных с конца
+        Вычислить решения дя всех неизвестных с конца
         для i от num-1 до 0
             ans[i] = a[i][num+1]
             для j от num до i
@@ -206,8 +204,6 @@ public class SLAE_GAUSS {
     public double[] getAns() {
         return ans;
     }
-
-
 
     public void printAns(){
         for (int i=0; i<num; i++)
