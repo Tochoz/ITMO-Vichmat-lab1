@@ -137,7 +137,7 @@ public class SLAE_GAUSS {
         return 3;
     }
     // Метод вычисляет решение системы, если она до этого была приведена к треугольному виду    (НАДО ЛИ ПРОВЕРЯТЬ)
-    public double[] computeAnss(int input){ // TODO вывод ссылку на решения, в аргументы давать вывод triangle
+    public double[] computeAnss(int input){
         // Обработать результат приведения к треугольному виду
         switch (input){
             case 0:
