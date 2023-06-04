@@ -5,14 +5,14 @@ public class Main {
         try {
             SLAE_GAUSS system = new SLAE_GAUSS();
 
-            system.init("data.txt");          // СЃРѕР·РґР°РЅРёРµ РѕР±СЉРµРєС‚Р° СЃРёСЃС‚РµРјС‹
-            system.print();                     // РІС‹РІРѕРґ СЃРёСЃС‚РµРјС‹ РІ РєРѕРЅСЃРѕР»СЊ
+            system.init("data.txt");          // создание объекта системы
+            system.print();                     // вывод системы в консоль
             System.out.println();
-            int resultTriangle = system.makeTriangle(); // РїСЂРёРІРµРґРµРЅРёРµ Рє С‚СЂРµСѓРіРѕР»СЊРЅРѕРјСѓ РІРёРґСѓ
-            system.print();                     // РІС‹РІРѕРґ СЃРёСЃС‚РµРјС‹ РІ С‚СЂРµСѓРіРѕР»СЊРЅРѕРј РІРёРґРµ
+            int resultTriangle = system.makeTriangle(); // приведение к треугольному виду
+            system.print();                     // вывод системы в треугольном виде
             System.out.println();
-            double[] ans = system.computeAnss(resultTriangle);// СЂРµС€РµРЅРёРµ СЃРёСЃС‚РµРјС‹
-            if (ans != null) // РІС‹РІРѕРґ РјР°СЃСЃРёРІР° РѕС‚РІРµС‚РѕРІ СЃРёСЃС‚РµРјС‹
+            double[] ans = system.computeAnss(resultTriangle);// решение системы
+            if (ans != null) // вывод массива ответов системы
                 system.printAns();
 
         } catch (FileNotFoundException e){
